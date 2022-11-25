@@ -14,7 +14,9 @@ app.use(function (req, res, next) {
 
 app.use('/boards', require('./board'));
 app.use('/busstop', require('./busStopApi'));
+app.use('/busstopArrival', require('./busStopArrivalApi'));
 app.use('/buslocation', require('./busLocationApi'));
+app.use('/kakaomap', require('./kakaomapApi'));
 
 app.listen(process.env.PORT || port, () => {
 	console.log('Listening...');

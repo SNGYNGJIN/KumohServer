@@ -22,5 +22,17 @@ router.get('/:no', function(req, res, next) {
 	}
 });
 
+router.post('/', function(req, res, next) {
+	console.log("REST API Post Method - Create");
+	var boardLastItem = boardList.reduce((previous, current) => previous.no > current.no ? previous:current);
+	var boardItem = new Object();
+	boardItem.no = boardLastItem.no + 1;
+	boardItem.subject = req.body.subject;
+	boardItem.content = req.body.content;
+	boardItem.writer = req.body.writer;
+	boardItem.writedate = dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
+	boardList.push(boardItem);
+	res.json({success:true});
+});
 
 module.exports = router;
