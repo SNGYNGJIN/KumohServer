@@ -1,57 +1,96 @@
-
 <!-- 길찾기 : https://prefer2.tistory.com/entry/%EC%B9%B4%EC%B9%B4%EC%98%A4%EB%A7%B5%EC%A7%80%EB%8F%84-API-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0 -->
 
 <!DOCTYPE html>
 
 <style type="text/css">
-    html, body { height:100%; overflow:hidden }
+    html,
+    body {
+        height: 100%;
+        overflow: hidden
+    }
 </style>
 
 <html>
+
 <head>
     <meta charset="utf-8">
-    <title>지도 생성하기</title>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4e183603a64e7954cf3054bf5bd15786&libraries=services"></script>
+    <title>지도</title>
+    <script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4e183603a64e7954cf3054bf5bd15786&libraries=services"></script>
 
 </head>
+
 <body>
-<!-- 지도를 표시할 div 입니다 -->
-<div id="map" style="width: 100%;height: 100%;"></div>
+    <div id="map" style="width: 100%;height: 100%;"></div>
 
-<script>
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-    mapOption = { 
-        center: new kakao.maps.LatLng(36.1451, 128.3920), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
-    };
+    <script>
+        var mapContainer = document.getElementById('map'), 
+            mapOption = {
+                center: new kakao.maps.LatLng(36.1453, 128.3920), 
+                level: 3 
+            };
 
-// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
-var map = new kakao.maps.Map(mapContainer, mapOption); 
-map.setDraggable(false);
-map.setZoomable(true);    
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+        map.setDraggable(false);
+        map.setZoomable(false);
+        map.addOverlayMapTypeId(kakao.maps.MapTypeId.ROADVIEW);
 
-var geocoder = new kakao.maps.services.Geocoder();
+        var ps = new kakao.maps.services.Places();
+        ps.keywordSearch("금오공과대학교", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 디지털관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 본관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 학생회관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 테크노관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 글로벌관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 청운대", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 산학협력관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 국제교육관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 두레관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 오름관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 체육관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 벤처창업관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 골프학습관", placesSearchCB);
 
-// 주소로 좌표를 검색합니다
-geocoder.addressSearch('금오공과대학교 디지털관', function(result, status) {
+        function placesSearchCB(data, status, pagination) {
+            if (status === kakao.maps.services.Status.OK) {
+                displayPlaces(data);
 
-    // 정상적으로 검색이 완료됐으면 
-     if (status === kakao.maps.services.Status.OK) {
-        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+            } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+                alert('검색 결과가 존재하지 않습니다.');
+                return;
+            } else if (status === kakao.maps.services.Status.ERROR) {
+                alert('검색 결과 중 오류가 발생했습니다.');
+                return;
+            }
+        }
 
-        // 결과값으로 받은 위치를 마커로 표시합니다
-        var marker = new kakao.maps.Marker({
-            map: map,
-            position: coords
-        });
+        function displayPlaces(places) {
+                var placePosition = new kakao.maps.LatLng(places[0].y, places[0].x),
+                    marker = addMarker(placePosition, 0, 'T');
+        }
 
-        // 인포윈도우로 장소에 대한 설명을 표시합니다
-        var infowindow = new kakao.maps.InfoWindow({
-            content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
-        });
-        infowindow.open(map, marker);
-    } 
-});    
-</script>
+        function addMarker(position, idx, title) {
+            var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png',
+                imageSize = new kakao.maps.Size(36, 37), 
+                imgOptions = {
+                    spriteSize: new kakao.maps.Size(36, 691), 
+                    spriteOrigin: new kakao.maps.Point(0, (idx * 46) + 10), 
+                    offset: new kakao.maps.Point(13, 37) 
+                },
+                // markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+                marker = new kakao.maps.Marker({
+                    position: position,
+                    // image: markerImage,
+                    title: title
+                });
+
+            marker.setMap(map);
+            markers.push(marker); 
+
+            return marker;
+        }
+
+    </script>
 </body>
+
 </html>
