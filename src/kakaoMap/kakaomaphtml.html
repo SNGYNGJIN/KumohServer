@@ -1,0 +1,224 @@
+<!-- 길찾기 : https://prefer2.tistory.com/entry/%EC%B9%B4%EC%B9%B4%EC%98%A4%EB%A7%B5%EC%A7%80%EB%8F%84-API-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0 -->
+
+<!DOCTYPE html>
+
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        overflow: hidden
+    }
+</style>
+
+<style>
+    .label {
+        margin-bottom: 96px;
+    }
+
+    .label * {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .label .left {
+        background: url("https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_l.png") no-repeat;
+        display: inline-block;
+        height: 24px;
+        overflow: hidden;
+        vertical-align: top;
+        width: 7px;
+    }
+
+    .label .center {
+        background: url(https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_bg.png) repeat-x;
+        display: inline-block;
+        height: 24px;
+        font-size: 12px;
+        line-height: 24px;
+    }
+
+    .label .right {
+        background: url("https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_r.png") -1px 0 no-repeat;
+        display: inline-block;
+        height: 24px;
+        overflow: hidden;
+        width: 6px;
+    }
+</style>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>지도</title>
+    <script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4e183603a64e7954cf3054bf5bd15786&libraries=services"></script>
+
+</head>
+<body>
+    <div id="map" style="width: 100%;height: 80%;"></div>
+    <div id="clickLatlng"></div>
+
+    <script>
+        var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png',
+    imageSize = new kakao.maps.Size(64, 69), 
+    imageOption = {offset: new kakao.maps.Point(27, 69)}; 
+        var lat = '36.14573716079674';
+        var lng = '128.39242990142242';
+        var myPosition = new kakao.maps.LatLng(lat,lng);
+        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+        var me = new kakao.maps.Marker({
+            position: myPosition,
+            image: markerImage
+        });
+
+        var areas = [
+            {
+                name: '디지털관',
+                path: [
+                    new kakao.maps.LatLng(36.14613115366231, 128.39187023231213),
+                    new kakao.maps.LatLng(36.14630088036045, 128.39277318132372),
+                    new kakao.maps.LatLng(36.14563133851095, 128.39300577142666),
+                    new kakao.maps.LatLng(36.145388633770075, 128.39217931248163),
+                ]
+            },
+            {
+                name: '글로벌관',
+                path: [
+                    new kakao.maps.LatLng(36.14745966741059, 128.39173260393167),
+                    new kakao.maps.LatLng(36.147412732533645, 128.39228175176606),
+                    new kakao.maps.LatLng(36.147459539522764, 128.39251868057872),
+                    new kakao.maps.LatLng(36.146573448434694, 128.39276661329697),
+                    new kakao.maps.LatLng(36.146397319823954, 128.3918416040858),
+                    new kakao.maps.LatLng(36.147337498130234, 128.39158322929484),
+                ]
+            }
+        ];
+
+
+        // 맵 설정 및 생성
+        var mapContainer = document.getElementById('map'),
+            mapOption = {
+                center: new kakao.maps.LatLng(36.1453, 128.3920),
+                level: 3
+            };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption),
+            customOverlay = new kakao.maps.CustomOverlay({});
+
+        map.setDraggable(false);
+        map.setZoomable(false);
+        map.addOverlayMapTypeId(kakao.maps.MapTypeId.ROADVIEW);
+        me.setMap(map);
+
+        // 다각형 생성
+        for (var i = 0, len = areas.length; i < len; i++) {
+            displayArea(areas[i]);
+        }
+
+        function displayArea(area) {
+            var polygon = new kakao.maps.Polygon({
+                map: map,
+                path: area.path,
+                strokeWeight: 2,
+                strokeColor: '#004c80',
+                strokeOpacity: 0.8,
+                fillColor: '#fff',
+                fillOpacity: 0.3
+            });
+
+            kakao.maps.event.addListener(polygon, 'click', function (mouseEvent) {
+                polygon.setOptions({ fillColor: '#09f' });
+
+                customOverlay.setContent('<div class="label"><span class="left"></span><span class="center">' + area.name + '</span><span class="right"></span></div>');
+
+                customOverlay.setPosition(mouseEvent.latLng);
+                customOverlay.setMap(map);
+            });
+        }
+
+        // 핀 생성
+        var ps = new kakao.maps.services.Places();
+        ps.keywordSearch("금오공과대학교", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 디지털관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 본관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 학생회관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 테크노관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 글로벌관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 청운대", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 산학협력관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 국제교육관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 두레관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 오름관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 체육관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 벤처창업관", placesSearchCB);
+        ps.keywordSearch("금오공과대학교 골프학습관", placesSearchCB);
+
+        function placesSearchCB(data, status, pagination) {
+            if (status === kakao.maps.services.Status.OK) {
+                displayPlaces(data);
+
+            } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+                alert('검색 결과가 존재하지 않습니다.');
+                return;
+            } else if (status === kakao.maps.services.Status.ERROR) {
+                alert('검색 결과 중 오류가 발생했습니다.');
+                return;
+            }
+        }
+
+        function displayPlaces(places) {
+            var placePosition = new kakao.maps.LatLng(places[0].y, places[0].x),
+                marker = addMarker(placePosition, 0, 'T');
+        }
+
+        function addMarker(position, idx, title) {
+            var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png',
+                imageSize = new kakao.maps.Size(36, 37),
+                imgOptions = {
+                    spriteSize: new kakao.maps.Size(36, 691),
+                    spriteOrigin: new kakao.maps.Point(0, (idx * 46) + 10),
+                    offset: new kakao.maps.Point(13, 37)
+                },
+                // markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+                marker = new kakao.maps.Marker({
+                    position: position,
+                    // image: markerImage,
+                    title: title
+                });
+
+            marker.setMap(map);
+            markers.push(marker);
+
+            return marker;
+        }
+
+        function isInside(src, dest) {
+            var x = src[0], y = src[1];
+            var inside = false;
+            for(var i = 0, j = dest.length - 1; i < dest.length; j = i++) {
+                var xi = dest[i][0], yi = dest[i][1];
+                var xj = dest[j][0], yj = dest[j][1];
+                var intersect = ((yi > y) != (yj > y))
+                && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+                if(intersect) inside = !inseid;
+            }
+            return inside;
+        }
+
+        kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
+
+            // 클릭한 위도, 경도 정보를 가져옵니다 
+            var latlng = mouseEvent.latLng;
+
+            var message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
+            message += '경도는 ' + latlng.getLng() + ' 입니다';
+
+            var resultDiv = document.getElementById('clickLatlng');
+            resultDiv.innerHTML = message;
+
+        });
+
+    </script>
+</body>
+
+</html>
