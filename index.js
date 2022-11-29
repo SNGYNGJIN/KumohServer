@@ -15,6 +15,7 @@ app.use(function (req, res, next) {
 app.use('/boards', require('./board'));
 app.use('/busstop', require('./src/api/busStopApi'));
 app.use('/busstopArrival', require('./src/api/busStopArrivalApi'));
+app.use('/busstopTargetArrival', require('./src/api/busStopTargetArrivalApi'));
 app.use('/buslocation', require('./src/api/busLocationApi'));
 app.use('/kakaomap', require('./src/kakaoMap/kakaomapApi'));
 

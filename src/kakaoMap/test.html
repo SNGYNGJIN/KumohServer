@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        overflow: hidden
+    }
+</style>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>지도</title>
+    <script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4e183603a64e7954cf3054bf5bd15786&libraries=services"></script>
+
+</head>
+
+<body>
+    <div id="map" style="width: 100%;height: 100%;"></div>
+    <script>
+        var mapContainer = document.getElementById('map'),
+            mapOption = {
+                center: new kakao.maps.LatLng(36.1453, 128.3920),
+                level: 3
+            };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption),
+            customOverlay = new kakao.maps.CustomOverlay({});
+
+        map.setDraggable(false);
+        map.setZoomable(false);
+        map.addOverlayMapTypeId(kakao.maps.MapTypeId.ROADVIEW);
+    </script>
+</body>
+
+</html>
