@@ -14,6 +14,8 @@ app.use(function (req, res, next) {
 
 app.use('/boards', require('./board'));
 app.use('/busstop', require('./src/api/busStopApi'));
+app.use('/routeStn', require('./src/api/routeStnApi'));
+
 app.use('/busstopArrival', require('./src/api/busStopArrivalApi'));
 app.use('/busstopTargetArrival', require('./src/api/busStopTargetArrivalApi'));
 app.use('/buslocation', require('./src/api/busLocationApi'));
