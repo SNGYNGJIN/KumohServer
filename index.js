@@ -3,7 +3,7 @@ const app = express();
 const port = 8080;
 app.use(express.json());
 
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({ extended: false }));
 
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -22,5 +22,7 @@ app.use('/buslocation', require('./src/api/busLocationApi'));
 app.use('/kakaomap', require('./src/kakaoMap/kakaomapApi'));
 
 app.listen(process.env.PORT || port, () => {
-	console.log('Listening...');
+  console.log('Listening...');
+
+
 });
