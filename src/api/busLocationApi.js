@@ -17,7 +17,7 @@ var loadedData = {};
 getTargetCount(route);
 
 // 30초마다 불러오기
-const job = schedule.scheduleJob('0 * * * * *', async function () {
+const job = schedule.scheduleJob('*/2 * * * *', async function () {
 	getTargetCount(route);
 });
 
