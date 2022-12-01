@@ -18,7 +18,6 @@ getTargetCount(route);
 
 // 30초마다 불러오기
 const job = schedule.scheduleJob('0 * * * * *', async function () {
-	console.log("auto load ");
 	getTargetCount(route);
 });
 
@@ -28,7 +27,7 @@ async function getTargetCount(route) {
 		loadedData[route[i]['routeid']] = res.data;
 		// console.log(loadedData[route[i]['routeid']]);
 	});
-	console.log('Bus Location Loaded');
+	console.log('Bus Location Information Loaded');
 }
 function APICall(param) {
 	const total = url + key + option;

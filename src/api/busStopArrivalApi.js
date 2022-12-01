@@ -15,14 +15,14 @@ const total = url + key + option;
 let item;
 
 router.get('/', async function (req, res, next) {
-	console.log("BusStop Get Method - Read All");
+	console.log("BusStopArrival Get Method - Read All");
 	const { data } = await axios.get(total, { httpsAgent });
 	item = data;
 	res.json({ success: true, data: item });
 });
 
 router.get('/:nodeId', async (req, res, next) => {
-	console.log("REST API Get Method - Read " + req.params.nodeId);
+	console.log("BusStopArrival Get Method - Read " + req.params.nodeId);
 	const { data } = await axios.get(total + req.params.nodeId, { httpsAgent });
 	item = data;
 	res.json({ success: true, data: item });

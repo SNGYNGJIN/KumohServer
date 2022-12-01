@@ -8,9 +8,6 @@ router.get('/', async function (req, res, next) {
 });
 
 router.post('/', async function (req, res, next) {
-    console.log("BusStop Post Method - Read All");
-    console.log(req.body.keyword);
-
     res.json({
         success: true, data: busstop.filter(function (e) {
             return e.nodenm.match(req.body.keyword);

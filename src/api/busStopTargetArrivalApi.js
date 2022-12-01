@@ -13,7 +13,7 @@ const httpsAgent = new https.Agent({
 });
 
 router.get('/', async function(req, res, next) {
-	console.log("BusStop Get Method - Read All");
+	console.log("BusStopTarget Get Method - Read All");
 	const total = url + key + option;
 	const { data } = await axios.get(total, { httpsAgent });
 	let item = data;

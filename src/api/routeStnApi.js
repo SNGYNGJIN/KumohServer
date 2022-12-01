@@ -8,9 +8,6 @@ router.get('/', async function (req, res, next) {
 });
 
 router.post('/', async function (req, res, next) {
-    console.log("RouteStn Post Method - Read All");
-    console.log(req.body.keyword);
-
     res.json({
         success: true, data: routeStn.filter(function (e) {
             return e.routeid.match(req.body.keyword);
